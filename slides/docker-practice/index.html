@@ -1,0 +1,704 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Docker从入门到实践</title>
+
+    <meta name="description" content="docker practice">
+    <meta name="author" content="gejiawen">
+
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="../../lib/css/reveal.min.css">
+    <link rel="stylesheet" href="../../lib/css/theme/default.css" id="theme">
+    <!-- theme list: default, sky, beige, blood, simple, serif, night, moon, solarized -->
+
+    <!-- For syntax highlighting -->
+    <link rel="stylesheet" href="../../lib/css/zenburn.css">
+
+    <!-- If the query includes 'print-pdf', include the PDF print sheet -->
+    <script>
+        if (window.location.search.match(/print-pdf/gi)) {
+            var link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.type = 'text/css';
+            link.href = '../../lib/css/pdf.css';
+            document.getElementsByTagName('head')[0].appendChild(link);
+        }
+    </script>
+
+    <!--[if lt IE 9]>
+    <script src="../../lib/js/html5shiv.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+
+<div class="reveal">
+
+    <!-- Any section element inside of this container is displayed as a slide -->
+    <div class="slides">
+        <section>
+            <h1>Docker从入门到实践</h1>
+            <p class="fragment">
+                <small>
+                    Created by <a href="http://blog.gejiawen.com">gejiawen</a> for
+                    <a href="http://www.qxwz.com/">QXWZ</a>
+                </small>
+            </p>
+            <p class="fragment">
+                <small>2017.05.20</small>
+            </p>
+        </section>
+
+        <section>
+            <h1>agenda</h1>
+            <ul>
+                <li class="fragment">基本知识</li>
+                <li class="fragment">使用Docker</li>
+                <li class="fragment">配置与管理</li>
+                <li class="fragment">高级话题</li>
+                <li class="fragment">Docker周边介绍</li>
+            </ul>
+        </section>
+
+        <section>
+            <ol>
+                <li>什么是Docker？</li>
+                <li>用它会带来什么样的好处？</li>
+                <li>......</li>
+            </ol>
+        </section>
+
+        <section>
+            <h3>带领你进入</h3>
+            <h3>Docker的世界......</h3>
+        </section>
+
+        <section data-transition="linear" data-background="#4d7e65" data-background-transition="slide">
+            <h3>Chapter1，基本知识</h3>
+        </section>
+
+        <section>
+            <h3><a href="https://www.docker.com/what-docker">what is docker？</a></h3>
+        </section>
+        
+        <section>
+            <ol>
+                <li>一家名为dotCloud的初创公司的内部产品</li>
+                <li>采用go语言开发，现已开源</li>
+                <li>算是颠覆了当时的虚拟化技术</li>
+            </ol>
+        </section>
+        
+        <section>
+            <img src="http://gejiawen-blog.oss-cn-shanghai.aliyuncs.com/slides/docker-practice/001.png" alt="">
+        </section>
+
+        <section>
+            <p>Docker包括三个基本概念：</p>
+            <ul>
+                <li>镜像（Image）</li>
+                <li>容器（Container）</li>
+                <li>仓库（Repository）</li>
+            </ul>
+            <p class="fragment">
+                这个三个基本概念也从侧面阐述了整个Docker的生命周期。
+            </p>
+        </section>
+
+        <section>
+            <p>何为Docker镜像？</p>
+        </section>
+
+        <section>
+            <p>
+                Docker镜像是一个特殊的文件系统，除了提供容器运行时所需的程序、库、资源、配置等文件外，还包含了一些为运行时准备的一些配置参数（如匿名卷、环境变量、用户等）。
+                <br>
+                镜像不包含任何动态数据，其内容在构建之后也不会被改变。
+            </p>
+        </section>
+
+        <section>
+            <p>
+                Docker在设计时，充分利用<a href="https://en.wikipedia.org/wiki/Union_mount">Union FS</a>的技术，将其设计为分层存储的架构。
+                <br>
+                严格来说，镜像只是一个虚拟的概念，其实际是由多层文件系统联合组成。
+            </p>
+        </section>
+
+        <section>
+            <p>何为Docker容器？</p>
+        </section>
+
+        <section>
+            <p>镜像（Image）和容器（Container）的关系，就像是面向对象程序设计中的类和实例一样，镜像是静态的定义，容器是镜像运行时的实体。容器可以被创建、启动、停止、删除、暂停等。</p>
+        </section>
+
+        <section>
+            <p>容器的实质是进程，但与直接在宿主执行的进程不同，容器进程运行于属于自己的独立的命名空间</p>
+        </section>
+
+        <section>
+            <ul>
+                <li>当一个容器启动运行时，是以当前镜像为基础，在其之上再创建一层可读写的文件存储层。</li>
+                <li>容器内所有的文件读写操作仅会影响当前存储层。</li>
+                <li>容器存储层跟随容器本身的生命周期。</li>
+            </ul>
+        </section>
+
+        <section>
+            <p>Docker容器的最佳实践</p>
+        </section>
+
+        <section>
+            <p>何为Docker仓库？</p>
+        </section>
+
+        <section>
+            <ul>
+                <li>公开Docker Registry</li>
+                <li>私有Docker Registry</li>
+            </ul>
+        </section>
+
+        <section data-transition="linear" data-background="#4d7e65" data-background-transition="slide">
+            <h3>Chapter2，使用Docker</h3>
+        </section>
+
+        <section>
+            <p>安装Docker</p>
+        </section>
+
+        <section>
+            <p>使用镜像</p>
+        </section>
+
+        <section>
+            <section>
+                <pre><code>docker pull [选项] [Docker Registry地址]&lt;仓库名&gt;:&lt;标签&gt;</code></pre>
+                <pre class="fragment"><code>docker pull ubuntu:14.04</code></pre>
+            </section>
+            <section>
+                <p> 虚悬镜像(dangling image) </p>
+            </section>
+            <section>
+                <p>镜像既没有仓库名，也没有标签，均为<code>&lt;none&gt;</code></p>
+            </section>
+            <section>
+                <pre><code>docker images -f dangling=true</code></pre>
+            </section>
+        </section>
+
+        <section>
+            <p>运行容器</p>
+        </section>
+
+        <section>
+            <pre><code>docker run [选项] [镜像]:[标签] [命令]</code></pre>
+            <pre class="fragment"><code>docker run -it --rm ubuntu:14.04 bash</code></pre>
+        </section>
+
+        <section>
+            <section>
+                <p>常用命令</p>
+            </section>
+            <section>
+                <pre><code>
+                        docker checkpoint  Manage checkpoints
+                        docker container   Manage containers
+                        docker image       Manage images
+                        docker network     Manage networks
+                        docker node        Manage Swarm nodes
+                        docker plugin      Manage plugins
+                        docker secret      Manage Docker secrets
+                        docker service     Manage services
+                        docker stack       Manage Docker stacks
+                        docker swarm       Manage Swarm
+                        docker system      Manage Docker
+                        docker volume      Manage volumes
+                    </code></pre>
+            </section>
+            <section>
+                <pre><code>
+                        docker attach
+                        docker build
+                        docker commit
+                        docker cp
+                        docker images
+                        docker inspect
+                        docker kill
+                        docker login
+                        docker pull
+                        docker push
+                        docker ps
+                        docker port
+                        docker rename
+                        docker restart
+                        docker rm
+                        docker rmi
+                        docker start/stop/restart
+                        docker tag
+                    </code></pre>
+            </section>
+        </section>
+
+        <section>
+            <p>使用Dockerfile</p>
+        </section>
+
+        <section>
+            <p>Dockerfile是一个文本文件，其内包含了一条条的指令(Instruction)，每一条指令构建一层，因此每一条指令的内容，就是描述该层应当如何构建。</p>
+        </section>
+
+        <section>
+            <img src="http://gejiawen-blog.oss-cn-shanghai.aliyuncs.com/slides/common/001.png" alt="">
+        </section>
+
+        <section>
+            <section>
+                <pre><code>
+                    FROM nginx
+                    RUN echo '<h1>Hello, Docker!</h1>' > /usr/share/nginx/html/index.html
+                </code></pre>
+            </section>
+            <section>
+                <pre><code>
+                    docker build .
+                </code></pre>
+            </section>
+        </section>
+
+        <section>
+            <section>
+                <p>特殊镜像：scratch</p>
+                <p>这个镜像是虚拟的概念，并不实际存在，它表示一个空白的镜像。</p>
+            </section>
+            <section>
+                <p>不以任何系统为基础，直接将可执行文件复制进镜像。</p>
+                <p>对于Linux下静态编译的程序来说，并不需要有操作系统提供运行时支持，所需的一切库都已经在可执行文件里了。</p>
+            </section>
+        </section>
+
+        <section>
+            <section>
+                <p>Dockerfile指令</p>
+            </section>
+            <section>
+                <pre><code>
+                    FROM    指定基础镜像
+                    RUN     执行命令
+                    COPY    复制文件
+                    ADD     更高级的复制文件
+                    CMD     容器启动命令
+                    ENTRYPOINT  入口点
+                    ENV     设置环境变量
+                    ARG     构建参数
+                    VOLUME  定义匿名卷
+                    EXPOSE  声明端口
+                    WORKDIR 指定工作目录
+                    USER    指定当前用户
+                    ONBUILD 为他人做嫁衣裳
+                </code></pre>
+            </section>
+            <section>
+                <ul>
+                    <li><a href="https://docs.docker.com/engine/reference/builder/">dockerfile reference</a></li>
+                    <li><a href="https://docs.docker.com/engine/userguide/eng-image/dockerfile_best-practices/">Best
+                        practices for writing Dockerfiles</a></li>
+                </ul>
+            </section>
+        </section>
+
+        <section data-transition="linear" data-background="#4d7e65" data-background-transition="slide">
+            <h3>Chapter3，配置与管理</h3>
+        </section>
+
+        <section>
+            <p>Docker中的数据管理</p>
+        </section>
+
+        <section>
+            <ul>
+                <li>数据卷（Data Volumes）</li>
+                <li>数据卷容器（Data Volume Containers）</li>
+            </ul>
+        </section>
+
+        <section>
+            <p>数据卷是一个可供一个或多个容器使用的特殊目录，它绕过UFS，可以提供很多有用的特性</p>
+            <ul>
+                <li>数据卷可以在容器之间共享和重用</li>
+                <li>对数据卷的修改会立马生效</li>
+                <li>对数据卷的更新，不会影响镜像</li>
+                <li>数据卷默认会一直存在，即使容器被删除</li>
+            </ul>
+        </section>
+
+        <section>
+            <section>
+                <p>如何删除数据卷</p>
+            </section>
+            <section>
+                <p>数据卷是被设计用来持久化数据的，它的生命周期独立于容器，Docker不会在容器被删除后自动删除数据卷，并且也不存在垃圾回收这样的机制来处理没有任何容器引用的数据卷。</p>
+            </section>
+            <section>
+                <ul>
+                    <li><code>docker rm -v [容器]</code></li>
+                    <li><code>docker volume prune</code></li>
+                </ul>
+            </section>
+        </section>
+
+        <section>
+            <p>挂在主机目录到容器内文件系统</p>
+            <pre class="fragment"><code>docker run -v [SRC_PATH]:[DEST_PATH] ...</code></pre>
+        </section>
+
+        <section>
+            <p>所谓数据卷容器，其实就是一个正常的容器，专门用来提供数据卷供其它容器挂载的。</p>
+        </section>
+
+        <section>
+            <section>
+                <p>先创建一个数据卷容器</p>
+                <pre><code>docker run -itd --name data -v /data mysql</code></pre>
+            </section>
+            <section>
+                <p>其他容器挂在data数据卷容器</p>
+                <pre><code>docker run -itd --name s1 --volumes-from data centos</code></pre>
+                <pre><code>docker run -itd --name s2 --volumes-from data centos</code></pre>
+            </section>
+        </section>
+
+        <section>
+            <p>Docker中的网络管理</p>
+        </section>
+
+        <section>
+            <ul>
+                <li>宿主环境与容器环境的网络互通</li>
+                <li>同一台宿主环境中不同容器之间的网络互联</li>
+                <li>不同宿主环境中容器之间的网络互联</li>
+            </ul>
+        </section>
+
+        <section>
+            <pre><code>docker run -itd --name s0 -P longjing1510/c-mysql:1.0</code></pre>
+            <pre><code>docker run -itd --name s0 -p 3306:3306 longjing1510/c-mysql:1.0</code></pre>
+        </section>
+
+        <section>
+            <pre><code>docker run -d --name db training/postgres</code></pre>
+            <pre><code>docker run -d -P --name web --link db:db training/webapp python app.py</code></pre>
+        </section>
+
+        <section>
+            <p>Docker在两个互联的容器之间创建了一个安全隧道，而且不用映射它们的端口到宿主主机上。在启动 db 容器的时候并没有使用 -p 和 -P 标记，从而避免了暴露数据库端口到外部网络上。</p>
+        </section>
+
+        <section>
+            <p>Docker 通过 2 种方式为容器公开连接信息：</p>
+            <ul>
+                <li>环境变量</li>
+                <li>/etc/hosts文件</li>
+            </ul>
+        </section>
+
+        <section data-transition="linear" data-background="#4d7e65" data-background-transition="slide">
+            <h3>Chapter4，高级话题</h3>
+        </section>
+
+        <section>
+            <p>Docker高级网络配置</p>
+        </section>
+
+        <section>
+            <p>当Docker启动时，会自动在主机上创建一个docker0虚拟网桥，实际上是Linux的一个bridge，可以理解为一个软件交换机。它会在挂载到它的网口之间进行转发。</p>
+        </section>
+
+        <section>
+            <section>
+                <p>
+                    当创建一个 Docker 容器的时候，同时会创建了一对 veth pair 接口（当数据包发送到一个接口时，另外一个接口也可以收到相同的数据包）。这对接口一端在容器内，即
+                    eth0；另一端在本地并被挂载到
+                    docker0 网桥，名称以 veth 开头（例如 vethAQI2QT）。通过这种方式，主机可以跟容器通信，容器之间也可以相互通信。Docker 就创建了在主机和所有容器之间一个虚拟共享网络
+                </p>
+            </section>
+            <section>
+                <img src="http://gejiawen-blog.oss-cn-shanghai.aliyuncs.com/slides/docker-practice/002.png" alt="">
+            </section>
+        </section>
+
+        <section>
+            <section>
+                <p>配置指南</p>
+            </section>
+            <section>
+                <p>docker daemon配置</p>
+                <ul>
+                    <li><code>-b BRIDGE or --bridge=BRIDGE</code></li>
+                    <li class="fragment shrink">指定容器挂载的网桥</li>
+                    <li><code>--bip=CIDR</code></li>
+                    <li class="fragment shrink">定制 docker0 的掩码</li>
+                    <li><code>-H SOCKET... or --host=SOCKET...</code></li>
+                    <li class="fragment shrink">Docker 服务端接收命令的通道</li>
+                    <li><code>--icc=true|false</code></li>
+                    <li class="fragment shrink">是否支持容器之间进行通信</li>
+                    <li><code>--ip-forward=true|false</code></li>
+                    <li class="fragment shrink">是否支持容器通信转发</li>
+                    <li><code>--iptables=true|false</code></li>
+                    <li class="fragment shrink">是否允许Docker添加iptables规则</li>
+                </ul>
+            </section>
+            <section>
+                <p>docker client配置</p>
+                <ul>
+                    <li><code>-h HOSTNAME or --hostname=HOSTNAME</code></li>
+                    <li class="fragment shrink">配置容器主机名</li>
+                    <li><code>--link=CONTAINER_NAME:ALIAS</code></li>
+                    <li class="fragment shrink">添加到另一个容器的连接</li>
+                    <li><code>--net=bridge|none|container:NAME_or_ID|host</code></li>
+                    <li class="fragment shrink">配置容器的桥接模式</li>
+                    <li><code>-p SPEC or --publish=SPEC</code></li>
+                    <li class="fragment shrink">映射容器端口到宿主主机</li>
+                    <li><code>-P or --publish-all=true|false</code></li>
+                    <li class="fragment shrink">映射容器所有端口到宿主主机</li>
+                </ul>
+            </section>
+        </section>
+
+        <section>
+            <p>多台物理主机之间的容器互联</p>
+        </section>
+
+        <section>
+            <ul>
+                <li>创建自己的网桥，比如br0</li>
+                <li>修改docker服务配置DOCKER_OPTS="-b=br0"</li>
+                <li>重启docker服务</li>
+            </ul>
+        </section>
+        
+        <section>
+            <p>物理网络拓扑结构</p>
+            <img src="http://gejiawen-blog.oss-cn-shanghai.aliyuncs.com/slides/docker-practice/003.png" alt="">
+        </section>
+        
+        <section>
+            <p>标准化开发和测试环境</p>
+        </section>
+        
+        <section>
+            <img src="http://gejiawen-blog.oss-cn-shanghai.aliyuncs.com/slides/docker-practice/004.png" alt="">
+        </section>
+
+        <section data-transition="linear" data-background="#4d7e65" data-background-transition="slide">
+            <h3>Chapter5，Docker周边介绍</h3>
+        </section>
+
+        <section>
+            <p>Docker流行项目</p>
+            <ul class="fragment">
+                <li>Docker Compose</li>
+                <li>Docker Machine</li>
+                <li>Docker Swarm</li>
+                <!--<li>etcd</li>-->
+                <li>Kubernetes</li>
+            </ul>
+        </section>
+
+        <section>
+            <p>Docker Compose</p>
+            <p class="fragment">Docker Compose 是 Docker 官方编排（Orchestration）项目之一，负责快速在集群中部署分布式应用。</p>
+            <p class="fragment"><a href="https://github.com/docker/compose">https://github.com/docker/compose</a></p>
+        </section>
+
+        <section>
+            <ul>
+                <li>Compose 定位是 “定义和运行多个Docker容器的应用”</li>
+                <li>有两个核心概念：服务（Service）、项目（Project）</li>
+                <li>compose模板：docker-compose.yml</li>
+            </ul>
+        </section>
+
+        <section>
+            <p>Docker Machine</p>
+            <p class="fragment">Docker Machine 是 Docker 官方编排（Orchestration）项目之一，负责在多种平台上快速安装 Docker 环境。</p>
+            <p class="fragment"><a href="https://github.com/docker/machine">https://github.com/docker/machine</a></p>
+        </section>
+
+        <section>
+            <p>Docker Swarm</p>
+            <p class="fragment">Docker Swarm 是 Docker 官方编排（Orchestration）项目之一，负责对 Docker 集群进行管理。</p>
+            <p class="fragment"><a href="https://github.com/docker/swarm">https://github.com/docker/swarm</a></p>
+        </section>
+
+        <section>
+            <p>Kubernetes</p>
+            <p class="fragment">Kubernetes 是 Google 团队发起并维护的基于Docker的开源容器集群管理系统。</p>
+            <p class="fragment"><a href="https://github.com/kubernetes/kubernetes">https://github.com/kubernetes/kubernetes</a></p>
+        </section>
+
+        <section>
+            <p>常见问题总结</p>
+        </section>
+
+        <section>
+            <p>如何批量清理临时镜像文件？</p>
+            <pre class="fragment"><code>docker rmi $(docker images -q -f dangling=true)</code></pre>
+        </section>
+
+        <section>
+            <p>如何查看镜像支持的环境变量？</p>
+            <pre class="fragment"><code>docker run IMAGE env</code></pre>
+        </section>
+
+        <section>
+            <p>本地的镜像文件都存放在哪里？</p>
+            <pre class="fragment"><code>/var/lib/docker/</code></pre>
+        </section>
+
+        <section>
+            <p>构建 Docker 镜像应该遵循哪些原则？</p>
+            <ul>
+                <li class="fragment">尽量选取满足需求但较小的基础系统镜像。比如：debian:wheezy，debian:jessie，alpine，busybox</li>
+                <li class="fragment">清理编译生成文件、安装包的缓存等临时文件</li>
+                <li class="fragment">安装各个软件时候要指定准确的版本号，并避免引入不需要的依赖</li>
+                <li class="fragment">从安全角度考虑，应用要尽量使用系统的库和依赖</li>
+                <li class="fragment">如果安装应用时候需要配置一些特殊的环境变量，在安装后要还原不需要保持的变量值</li>
+                <li class="fragment">使用 Dockerfile 创建镜像时候要添加 .dockerignore 文件或使用干净的工作目录</li>
+            </ul>
+        </section>
+
+        <section>
+            <p>碰到网络问题，无法 pull 镜像，命令行指定 http_proxy 无效？</p>
+            <p class="fragment">编辑 /etc/default/docker/daemon.json，添加加速配置</p>
+        </section>
+
+        <section>
+            <p>容器退出后，通过 docker ps 命令查看不到，数据会丢失么？</p>
+            <pre class="fragment"><code>docker ps -a</code></pre>
+        </section>
+
+        <section>
+            <p>如何停止所有正在运行的容器？</p>
+            <pre class="fragment"><code>docker kill $(docker ps -q)</code></pre>
+        </section>
+
+        <section>
+            <p>如何清理批量后台停止的容器？</p>
+            <pre class="fragment"><code>docker rm -f $(docker ps -qa)</code></pre>
+        </section>
+
+        <section>
+            <p>如何获取某个容器的 PID 信息？</p>
+            <pre class="fragment"><code>docker inspect --format '{{ .State.Pid }}' CONTAINER></code></pre>
+        </section>
+
+        <section>
+            <p>如何获取某个容器的 IP 地址？</p>
+            <pre class="fragment"><code>docker inspect --format '{{ .NetworkSettings.IPAddress }}' CONTAINER</code></pre>
+        </section>
+
+        <section>
+            <p>如何临时退出一个正在交互的容器的终端，而不终止它？</p>
+            <pre class="fragment"><code>Ctrl-p，Ctrl-q</code></pre>
+        </section>
+
+        <section>
+            <p>如何让非root用户免sudo执行docker客户端命令？</p>
+            <p class="fragment">将docker组添加为当前用户的附加组</p>
+        </section>
+
+        <section>
+            <section>
+                <p>最后再送一张docker命令分布图</p>
+            </section>
+            <section>
+                <img src="http://gejiawen-blog.oss-cn-shanghai.aliyuncs.com/slides/docker-practice/005.png" alt="">
+            </section>
+        </section>
+
+        <section>
+            <h1>THE END</h1>
+            <h4>Thank you everyone!</h4>
+        </section>
+
+        <section>
+            <h1>Q & A</h1>
+        </section>
+
+    </div>
+
+</div>
+
+<script src="../../lib/js/head.min.js"></script>
+<script src="../../lib/js/reveal.min.js"></script>
+
+<script>
+
+    // Full list of configuration options available here:
+    // https://github.com/hakimel/reveal.js#configuration
+    Reveal.initialize({
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+
+        slideNumber: true,
+
+        theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+        transition: Reveal.getQueryHash().transition || 'zoom', // default/cube/page/concave/zoom/linear/fade/none
+
+
+        // Parallax scrolling
+        // parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+        // parallaxBackgroundSize: '2100px 900px',
+
+        // Optional libraries used to extend on reveal.js
+        dependencies: [{
+            src: '../../lib/js/classList.js',
+            condition: function () {
+                return !document.body.classList;
+            }
+        }, {
+            src: '../../lib/js/marked.js',
+            condition: function () {
+                return !!document.querySelector('[data-markdown]');
+            }
+        }, {
+            src: '../../lib/js/markdown.js',
+            condition: function () {
+                return !!document.querySelector('[data-markdown]');
+            }
+        }, {
+            src: '../../lib/js/highlight.js',
+            async: true,
+            callback: function () {
+                hljs.initHighlightingOnLoad();
+            }
+        }, {
+            src: '../../lib/js/zoom.js',
+            async: true,
+            condition: function () {
+                return !!document.body.classList;
+            }
+        }, {
+            src: '../../lib/js/notes.js',
+            async: true,
+            condition: function () {
+                return !!document.body.classList;
+            }
+        }]
+    });
+
+</script>
+
+</body>
+</html>

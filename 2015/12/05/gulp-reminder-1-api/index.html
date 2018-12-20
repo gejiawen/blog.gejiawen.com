@@ -1,0 +1,564 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+    
+    <meta name="author" content="gejiawen">
+    
+    <meta name="description" content="gulp备忘录专题文章，
+
+gulp备忘录（一）：API指南
+gulp备忘录（二）：常用插件
+gulp备忘录（三）：使用技巧
+gulp备忘录（四）：编写插件
+
+前言自从gulp面世以后，我就抛弃了Grunt加入了gulp的阵营。从易用性以及性能方面来说，无疑gulp更具优势。具体的可以看我之前的一篇">
+    
+    
+
+    
+    <link rel="alternative" href="atom.xml" title="蛋糕仙人" type="application/atom+xml">
+    
+    
+    
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>gulp备忘录（一）：API指南 | 蛋糕仙人 · 技术人需要危机感</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+
+    <!-- Javascript -->
+    <script src="/js/jquery-2.1.0.min.js"></script>
+    <script src="/js/jquery.backstretch.min.js"></script>
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/js/headroom.min.js"></script>
+    <script src="/js/jquery.headroom.min.js"></script>
+    <script src="/js/common.js"></script>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    
+    <meta name="baidu-site-verification" content="SzJ3MGdmeo">
+
+
+    <meta name="360-site-verification" content="afe5dc96bbb8d111b618f78493b95bb8">
+
+
+    <!--<meta name="baidu-site-verification" content="SzJ3MGdmeo" />-->
+    <!--<meta name="360-site-verification" content="afe5dc96bbb8d111b618f78493b95bb8" />-->
+
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+<body>
+    <nav class="navbar navbar-default navbar-fixed-top navbar-inverse" role="banner">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="http://blog.gejiawen.com" title="蛋糕仙人">蛋糕仙人</a>
+            </div>
+
+            <div role="navigation" class="collapse navbar-collapse bs-navbar-collapse">
+                
+                <ul class="nav navbar-nav pull-right">
+                    <li>
+                        <a class="max-width max-w300" title="技术人需要危机感" href="/feelings/">技术人需要危机感</a>
+                    </li>
+                </ul>
+                
+
+                <ul class="nav navbar-nav">
+                    
+                    <li id="nav-index">
+                        <a href="/">首页</a>
+                    </li>
+                    
+                    <li id="nav-archives">
+                        <a href="/archives/">归档</a>
+                    </li>
+                    
+                    <li id="nav-categories">
+                        <a href="/categories/">分类</a>
+                    </li>
+                    
+                    <li id="nav-tags">
+                        <a href="/tags/">标签</a>
+                    </li>
+                    
+                    <li id="nav-pick">
+                        <a href="http://book.gejiawen.com/fucking-days-to-be-a-coder/">拾遗</a>
+                    </li>
+                    
+                    <li id="nav-about">
+                        <a href="/about/">关于</a>
+                    </li>
+                    
+
+                    <li id="nav-github"><a href="https://github.com/gejiawen" target="_blank">GitHub</a></li>
+                    <!--<li id="nav-rss"><a href="/atom.xml" target="_blank">Rss</a></li>-->
+                    <li id="nav-search"><input type="text" id="search" placeholder="search"></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <script>
+    var bgRoot = "http://gejiawen-blog.oss-cn-shanghai.aliyuncs.com/bg/";
+    var bgLength = "75";
+    var bgRandom = true;
+    var curImage = "74.jpg";
+
+    /*
+    $(function() {
+        // page-id...
+        var pageId = "2015/12/05/gulp-reminder-1-api/";
+        pageId = pageId.substr(0, pageId.indexOf("/"));
+        if(pageId === "") pageId = "index";
+
+        $("#nav-" + pageId).addClass("active");
+    });
+    */
+    </script>
+</body></html>
+    <article class="post container">
+    <div class="well post-body first-post last-post">
+        <h1>gulp备忘录（一）：API指南</h1>
+
+        <div class="time-info">
+            
+<span class="article-tags">
+    
+    Tags: <a href="/tags/nodejs/">nodejs</a>&nbsp;<a href="/tags/gulp/">gulp</a>&nbsp;<a href="/tags/gulp备忘录/">gulp备忘录</a>&nbsp;<a href="/tags/漫游NodeJS系列/">漫游NodeJS系列</a>&nbsp;
+</span>
+
+
+
+<span class="article-categories">
+    Category:
+    <a class="article-category-link" href="/categories/NODEJS/">NODEJS</a>
+</span>
+
+
+        </div>
+        <div class="time-info">
+            发表: <time datetime="2015-12-05T14:58:55.000Z" itemprop="datePublished">2015-12-05 22:58:55</time>
+            
+        </div>
+
+        <div class="post-body-inner">
+            
+                <div id="toc" class="toc-article well">
+                    <strong class="toc-title">大纲</strong>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#介绍"><span class="toc-number">2.</span> <span class="toc-text">介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#安装"><span class="toc-number">2.1.</span> <span class="toc-text">安装</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#开始使用"><span class="toc-number">3.</span> <span class="toc-text">开始使用</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#APIs说明"><span class="toc-number">4.</span> <span class="toc-text">APIs说明</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#gulp-task"><span class="toc-number">4.1.</span> <span class="toc-text">gulp.task</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#控制依赖顺序"><span class="toc-number">4.1.1.</span> <span class="toc-text">控制依赖顺序</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#gulp-src"><span class="toc-number">4.2.</span> <span class="toc-text">gulp.src</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#模式匹配"><span class="toc-number">4.2.1.</span> <span class="toc-text">模式匹配</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#匹配参数"><span class="toc-number">4.2.2.</span> <span class="toc-text">匹配参数</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#gulp-dest"><span class="toc-number">4.3.</span> <span class="toc-text">gulp.dest</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#写入参数"><span class="toc-number">4.3.1.</span> <span class="toc-text">写入参数</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#gulp-watch"><span class="toc-number">4.4.</span> <span class="toc-text">gulp.watch</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考列表"><span class="toc-number">5.</span> <span class="toc-text">参考列表</span></a></li></ol>
+                </div>
+            
+
+            <p><strong>gulp备忘录</strong>专题文章，</p>
+<ul>
+<li><a href="http://blog.gejiawen.com/2015/12/05/gulp-reminder-1-api/">gulp备忘录（一）：API指南</a></li>
+<li>gulp备忘录（二）：常用插件</li>
+<li>gulp备忘录（三）：使用技巧</li>
+<li>gulp备忘录（四）：编写插件</li>
+</ul>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>自从<a href="http://gulpjs.com/" target="_blank" rel="noopener">gulp</a>面世以后，我就抛弃了<a href="http://gruntjs.com/" target="_blank" rel="noopener">Grunt</a>加入了gulp的阵营。从易用性以及性能方面来说，无疑gulp更具优势。具体的可以看我之前的一篇文章<a href="http://blog.gejiawen.com/2015/01/09/gulp-vs-grunt/">gulp vs. grunt</a>。</p>
+<p>可以说，我很早就开始使用gulp了，那为何会有这几篇gulp的相关文章呢？是因为发现我在使用gulp的时候，仍然处于一个<strong>仅仅会用</strong>的层面上，当需要使用一些插件时，往往是在<a href="https://www.npmjs.com/" target="_blank" rel="noopener">npm</a>找到对应的插件，然后照着example抄一遍，对gulp的有些特性还不是很清楚。所以我觉得很有必要写一些东西来深度学习一下gulp。</p>
+<h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><p>首先来介绍一下gulp。</p>
+<p>gulp是一款前端构建工具，它将构建操作抽象成一系列的任务。做的事情与grunt是一样的。不过它信奉的原则是<strong>代码优于配置</strong>，基于Node.js中的stream来操作文件。</p>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>我们可以通过以下方式来安装gulp，</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install -g gulp</span><br></pre></td></tr></table></figure>
+<p>安装成功之后你就可以直接在任何路径上使用<code>gulp</code>命令了。不过在实际项目中使用gulp时，往往需要安装一个local版本的gulp，</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install gulp --save-dev</span><br></pre></td></tr></table></figure>
+<p>采用<code>--save-dev</code>将gulp写进<code>package.json</code>的<code>devDependencies</code>依赖中。</p>
+<p>至于为何全局安装gulp之后还需要在项目中安装gulp，可以参见stackoverflow上的问题<a href="http://stackoverflow.com/questions/22115400/why-do-we-need-to-install-gulp-globally-and-locally" target="_blank" rel="noopener">why-do-we-need-to-install-gulp-globally-and-locally</a>。基本上这么做的原因是为了灵活的去使用gulp，如果实在不能理解的话也不必去纠结。你大可以不用全局安装gulp，仅在项目中安装。</p>
+<h1 id="开始使用"><a href="#开始使用" class="headerlink" title="开始使用"></a>开始使用</h1><p>在项目中添加gulp依赖并安装完毕之后，我们需要在项目的根目录中创建一个名叫<code>gulpfile.js</code>的文件。我们将在这个gulpfile.js文件中完成所有构建任务的设计。</p>
+<p>一般地，我们gulpfile.js文件内容如下，</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> gulp = <span class="built_in">require</span>(<span class="string">'gulp'</span>);</span><br><span class="line"></span><br><span class="line">gulp.task(<span class="string">'default'</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'default finished.'</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>然后我们直接在命令行中输入<code>gulp</code>就可以开始构件任务，</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[00:54:32] Using gulpfile ~/code/<span class="built_in">test</span>/<span class="built_in">test</span>-gulp/gulpfile.js</span><br><span class="line">[00:54:32] Starting <span class="string">'default'</span>...</span><br><span class="line">default finished.</span><br><span class="line">[00:54:32] Finished <span class="string">'default'</span> after 98 μs</span><br></pre></td></tr></table></figure>
+<p>在本例中，我们在default任务中啥事也没干，仅仅输出一条提示信息。</p>
+<p>基本上gulp的使用就是这样的模式。</p>
+<h1 id="APIs说明"><a href="#APIs说明" class="headerlink" title="APIs说明"></a>APIs说明</h1><p>gulp的API非常简洁，常用的API就4个，他们是<code>gulp.task</code>，<code>gulp.src</code>，<code>gulp.dest</code>，<code>gulp.watch</code>。</p>
+<h2 id="gulp-task"><a href="#gulp-task" class="headerlink" title="gulp.task"></a><code>gulp.task</code></h2><p><code>gulp.task</code>用于定义任务。其内部使用的是一个名为<a href="https://github.com/orchestrator/orchestrator" target="_blank" rel="noopener">Orchestrator</a>任务调度库。它的用法很简单，</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gulp.task(name[, deps], fn)</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">参数</th>
+<th style="text-align:left">类型</th>
+<th style="text-align:left">是否可选</th>
+<th style="text-align:left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>name</code></td>
+<td style="text-align:left"><strong>String</strong></td>
+<td style="text-align:left"><strong>必须</strong></td>
+<td style="text-align:left">任务的名称</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>deps</code></td>
+<td style="text-align:left"><strong>Array</strong></td>
+<td style="text-align:left">可选</td>
+<td style="text-align:left">是一个数组，表示当前任务所依赖的其他任务</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>fn</code></td>
+<td style="text-align:left"><strong>Function</strong></td>
+<td style="text-align:left"><strong>必须</strong></td>
+<td style="text-align:left">任务具体要执行的操作</td>
+</tr>
+</tbody>
+</table>
+<p>下面是一个例子，</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">gulp.task(<span class="string">'mytask'</span>, [<span class="string">'one'</span>, <span class="string">'two'</span>, <span class="string">'three'</span>], <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    doSomething();</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">gulp.task(<span class="string">'mytask2'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    doSomething();</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">gulp.task(<span class="string">'mytask3'</span>, [<span class="string">'one'</span>, <span class="string">'two'</span>]);</span><br></pre></td></tr></table></figure>
+<p>如示例所示，当某一个任务没有依赖任务时，可以省略<code>deps</code>参数。当一个任务有依赖任务时，也是可以省略<code>fn</code>参数的。</p>
+<h3 id="控制依赖顺序"><a href="#控制依赖顺序" class="headerlink" title="控制依赖顺序"></a>控制依赖顺序</h3><p>当<code>gulp.task</code>定义任务并有依赖任务时，gulp默认将以最大的并发数去同时执行这些依赖任务。所以gulp默认是不保证依赖任务之间的异步操作等待的。</p>
+<p>若有下面这样一个示例，</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">gulp.task(<span class="string">'one'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'one is done.'</span>);</span><br><span class="line">    &#125;, <span class="number">2000</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">gulp.task(<span class="string">'two'</span>, [<span class="string">'one'</span>], <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'two is done.'</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">gulp.task(<span class="string">'default'</span>, [<span class="string">'one'</span>, <span class="string">'two'</span>]);</span><br></pre></td></tr></table></figure>
+<p>如果我们的<code>one</code>，<code>two</code>这两个任务彼此之间有顺序依赖的话（示例中采用setTimeout来模拟异步任务），即<code>two</code>要在<code>one</code>的异步操作完毕之后执行。如果我们直接执行<code>gulp</code>，得到结果如下，</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[01:25:08] Using gulpfile ~/code/<span class="built_in">test</span>/<span class="built_in">test</span>-gulp/gulpfile.js</span><br><span class="line">[01:25:08] Starting <span class="string">'one'</span>...</span><br><span class="line">[01:25:08] Finished <span class="string">'one'</span> after 578 μs</span><br><span class="line">[01:25:08] Starting <span class="string">'two'</span>...</span><br><span class="line">[01:25:08] two is <span class="keyword">done</span>.</span><br><span class="line">[01:25:08] Finished <span class="string">'two'</span> after 2.33 ms</span><br><span class="line">[01:25:08] Starting <span class="string">'default'</span>...</span><br><span class="line">[01:25:08] Finished <span class="string">'default'</span> after 35 μs</span><br><span class="line">[01:25:10] one is <span class="keyword">done</span>.</span><br></pre></td></tr></table></figure>
+<p>可以看到，任务<code>one</code>和任务<code>two</code>几乎是在同一时刻就同时执行的。但是在<em>01:25:08</em>任务<code>two</code>就已经完成了，而任务<code>one</code>在<em>01:25:10</em>才完成。所以这并没有达到我们的要求。那么，我们该如何做呢？</p>
+<p>通常，我们会有三种方式来达到这一目的。</p>
+<p>第一种方式：在异步操作完成后执行一个回调函数来通知gulp这个异步任务已经完成，这个回调函数就是任务函数的第一个参数。</p>
+<p>下面我们来改写一下任务<code>one</code>，</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">gulp.task(<span class="string">'one'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">callback</span>) </span>&#123;</span><br><span class="line">    setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'one is done.'</span>);</span><br><span class="line">        callback();</span><br><span class="line">    &#125;, <span class="number">2000</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>此时我们再执行<code>gulp</code>其结果如下，</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[01:40:02] Using gulpfile ~/code/<span class="built_in">test</span>/<span class="built_in">test</span>-gulp/gulpfile.js</span><br><span class="line">[01:40:02] Starting <span class="string">'one'</span>...</span><br><span class="line">[01:40:04] one is <span class="keyword">done</span>.</span><br><span class="line">[01:40:04] Finished <span class="string">'one'</span> after 2.01 s</span><br><span class="line">[01:40:04] Starting <span class="string">'two'</span>...</span><br><span class="line">[01:40:04] two is <span class="keyword">done</span>.</span><br><span class="line">[01:40:04] Finished <span class="string">'two'</span> after 659 μs</span><br><span class="line">[01:40:04] Starting <span class="string">'default'</span>...</span><br><span class="line">[01:40:04] Finished <span class="string">'default'</span> after 12 μs</span><br></pre></td></tr></table></figure>
+<p>如此我们就能保证在执行<code>two</code>之前，<code>one</code>的异步操作也执行完毕了。</p>
+<p>下面我们介绍另外两种方式。</p>
+<p>第二种方式：定义任务时返回一个流对象。</p>
+<p>比如，</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">gulp.task(<span class="string">'one'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> gulp.src(<span class="string">'client/**/*.js'</span>)</span><br><span class="line">        .pipe(minify())</span><br><span class="line">        .pipe(gulp.dest(<span class="string">'build'</span>));</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">gulp.task(<span class="string">'two'</span>, [<span class="string">'one'</span>], <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'two is done.'</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">gulp.task(<span class="string">'default'</span>, [<span class="string">'one'</span>, <span class="string">'two'</span>]);</span><br></pre></td></tr></table></figure>
+<p>第三种方式：返回一个promise对象。</p>
+<p>比如，</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> Q = <span class="built_in">require</span>(<span class="string">'q'</span>);</span><br><span class="line"></span><br><span class="line">gulp.task(<span class="string">'one'</span>,<span class="function"><span class="keyword">function</span>(<span class="params">cb</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> deferred = Q.defer();</span><br><span class="line">  </span><br><span class="line">    setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        deferred.resolve();</span><br><span class="line">    &#125;, <span class="number">5000</span>);</span><br><span class="line">  </span><br><span class="line">    <span class="keyword">return</span> deferred.promise;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">gulp.task(<span class="string">'two'</span>, [<span class="string">'one'</span>], <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'two is done.'</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">gulp.task(<span class="string">'default'</span>, [<span class="string">'one'</span>, <span class="string">'two'</span>]);</span><br></pre></td></tr></table></figure>
+<p><strong>总结</strong>，</p>
+<ul>
+<li>callback和返回promise的方式更具普适性，而返回stream的方式更加合适<code>gulp.src</code>相关的操作。</li>
+<li>callback方式在某些场景下可能更加灵活。比如任务中掺杂了一些业务逻辑的时候。</li>
+</ul>
+<h2 id="gulp-src"><a href="#gulp-src" class="headerlink" title="gulp.src"></a><code>gulp.src</code></h2><p>前面说过gulp的工作机制是基于Node.js中的流。这里所说的流并不是Node.js原始的流对象，而是一种虚拟文件流对象（<a href="https://github.com/gulpjs/vinyl-fs" target="_blank" rel="noopener">Vinyl files</a>），这个虚拟文件对象中存储着原始文件的路径、文件名、内容等信息。我们不关注这个，后面再讲解写gulp插件时会再次阐述这块内容。</p>
+<p>所以，简单来说<code>gulp.src</code>就是用来获取你需要操作的文件的。它的用法如下，</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gulp.src(globs[, options])</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">参数</th>
+<th style="text-align:left">类型</th>
+<th style="text-align:left">是否可选</th>
+<th style="text-align:left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>globs</code></td>
+<td style="text-align:left"><strong>String</strong>, <strong>Array</strong></td>
+<td style="text-align:left"><strong>必选</strong></td>
+<td style="text-align:left">文件匹配模式</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>options</code></td>
+<td style="text-align:left"><strong>Object</strong></td>
+<td style="text-align:left">可选</td>
+<td style="text-align:left">匹配选项</td>
+</tr>
+</tbody>
+</table>
+<p><code>gulp.src</code>内部使用<a href="https://github.com/isaacs/node-glob" target="_blank" rel="noopener">node-glob</a>模块来实现文件匹配。node-glob是一种与正则表达式类似的匹配范式。</p>
+<p><code>globs</code>参数也可以直接是用一个文件地址，还可以是一个包含多个匹配模式的数组。而<code>options</code>参数是用来辅助匹配的，它的某些参数设置将会影响虚拟文件流的获取。</p>
+<h3 id="模式匹配"><a href="#模式匹配" class="headerlink" title="模式匹配"></a>模式匹配</h3><p>node-glob中有如下几种匹配规则，</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">匹配范式</th>
+<th style="text-align:left">用法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>*</code></td>
+<td style="text-align:left">匹配0个或多个字符，但不会匹配路径分隔符，除非路径分隔符出现在末尾</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>**</code></td>
+<td style="text-align:left">匹配0个或多个目录及其子目录，需要单独出现。如果出现在末尾，也能匹配文件</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>?</code></td>
+<td style="text-align:left">匹配一个字符，不会匹配路径分隔符</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>[...]</code></td>
+<td style="text-align:left">匹配方括号中出现的字符中的任意一个，当方括号中第一个字符为^或!时，表示取反</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>!(p1,p2,p3)</code></td>
+<td style="text-align:left">匹配任何与括号中给定的任一模式都不匹配的</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>?(p1,p2,p3)</code></td>
+<td style="text-align:left">匹配括号中给定的任一模式0次或1次</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>+(p1,p2,p3)</code></td>
+<td style="text-align:left">匹配括号中给定的任一模式至少1次</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>*(p1,p2,p3)</code></td>
+<td style="text-align:left">匹配括号中给定的任一模式0次或多次</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>@(p1,p2,p3)</code></td>
+<td style="text-align:left">匹配括号中给定的任一模式1次</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>{p1,p2}</code></td>
+<td style="text-align:left">以展开模式进行匹配</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>备注</strong>： <code>(p1,p2,p3)</code>中的<code>,</code>其实是<code>|</code>。如果写成<code>p1|p2|p3</code>，将会导致markdown解析错误。暂时没找到解决方案，望知道的大神告知😂</p>
+</blockquote>
+<p>关于node-glob更多的用法，请参阅<a href="https://github.com/isaacs/node-glob" target="_blank" rel="noopener">node-glob</a>的相关文档。不过基本上上面的几种用法将会覆盖<code>gulp.src</code>90%以上的场景。</p>
+<p>下面是一些更详细的示例，</p>
+<ul>
+<li><code>*</code>能匹配<code>a.js</code>，<code>x.y</code>，<code>abc</code>，<code>abc/</code>，但不能匹配<code>a/b.js</code></li>
+<li><code>*.*</code>能匹配<code>a.js</code>，<code>style.css</code>，<code>a.b</code>，<code>x.y</code></li>
+<li><code>*/*/*.js</code>能匹配<code>a/b/c.js</code>，<code>x/y/z.js</code>，不能匹配<code>a/b.js</code>，<code>a/b/c/d.js</code></li>
+<li><code>**</code>能匹配<code>abc</code>，<code>a/b.js</code>，<code>a/b/c.js</code>，<code>x/y/z</code>，<code>x/y/z/a.b</code>，能用来匹配所有的目录和文件</li>
+<li><code>**/*.js</code>能匹配<code>foo.js</code>，<code>a/foo.js</code>，<code>a/b/foo.js</code>，<code>a/b/c/foo.js</code></li>
+<li><code>a/**/z</code>能匹配<code>a/z</code>，<code>a/b/z</code>，<code>a/b/c/z</code>，<code>a/d/g/h/j/k/z</code></li>
+<li><code>a/**b/z</code>能匹配<code>a/b/z</code>，<code>a/sb/z</code>，但不能匹配<code>a/x/sb/z</code>，因为只有单<code>**</code>单独出现才能匹配多级目录</li>
+<li><code>?.js</code>能匹配<code>a.js</code>，<code>b.js</code>，<code>c.js</code></li>
+<li><code>a??</code>能匹配<code>a.b</code>，<code>abc</code>，但不能匹配<code>ab/</code>，因为它不会匹配路径分隔符</li>
+<li><code>[xyz].js</code>只能匹配<code>x.js</code>，<code>y.js</code>，<code>z.js</code>，不会匹配<code>xy.js</code>，<code>xyz.js</code>等，整个中括号只代表一个字符</li>
+<li><code>[^xyz].js</code>能匹配<code>a.js</code>，<code>b.js</code>，<code>c.js</code>等，不能匹配<code>x.js</code>，<code>y.js</code>，<code>z.js</code></li>
+<li><code>a{b,c}d.js</code>能匹配<code>abd.js</code>，<code>acd.js</code>，不能匹配<code>abcd.js</code></li>
+</ul>
+<p>我们还可以将多个匹配模式组合成一个数组传递给<code>gulp.src</code>，比如</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gulp.src([<span class="string">'js/*.js'</span>, <span class="string">'css/*.js'</span>, <span class="string">'views/*.html'</span>]);</span><br></pre></td></tr></table></figure>
+<p>在使用这一方式时，我们还可以添加一个反模式用来在之前的匹配结果中排除某些匹配项，比如</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gulp.src([<span class="string">'js/*.js'</span>, <span class="string">'!js/jquery.js'</span>]);</span><br></pre></td></tr></table></figure>
+<p>因为反模式是在之前的匹配结果做排除的，所以反模式不能放在数组的第一个位置，比如下面这种方式是不正确用法，</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gulp.src([<span class="string">'!js/jquery.js'</span>, <span class="string">'js/*.js'</span>]); <span class="comment">// 反模式位于匹配模式数组的第一个位置，此时将起不到排除作用</span></span><br></pre></td></tr></table></figure>
+<h3 id="匹配参数"><a href="#匹配参数" class="headerlink" title="匹配参数"></a>匹配参数</h3><p>我们可以通过<code>options</code>给<code>gulp.src</code>传递匹配参数。<code>options</code>除了node-glob原有的一些参数之外，还有一些额外的参数。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">参数</th>
+<th style="text-align:left">默认值</th>
+<th style="text-align:left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>options.buffer</code></td>
+<td style="text-align:left"><code>true</code></td>
+<td style="text-align:left">gulp的虚拟文件对象默认以buffer的形式返回文件内容。若此项为<code>false</code>，则以stream的形式返回文件内容</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>options.read</code></td>
+<td style="text-align:left"><code>true</code></td>
+<td style="text-align:left">gulp默认是会进行读取文件内容操作的。若此项被设置为<code>false</code>则gulp则不会去读取文件</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>options.base</code></td>
+<td style="text-align:left">模式匹配中直到出现通配符之前的字符串</td>
+<td style="text-align:left">这个参数跟<code>gulp.dest</code>的最终路径息息相关</td>
+</tr>
+</tbody>
+</table>
+<p>这些参数中，唯一值得一提就是<code>options.base</code>。具体请接着往下看。</p>
+<h2 id="gulp-dest"><a href="#gulp-dest" class="headerlink" title="gulp.dest"></a><code>gulp.dest</code></h2><p><code>gulp.dest</code>简单来说就是用来写文件的。其用法如下，</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gulp.dest(path[, options])</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">参数</th>
+<th style="text-align:left">类型</th>
+<th style="text-align:left">是否可选</th>
+<th style="text-align:left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>path</code></td>
+<td style="text-align:left"><strong>String</strong></td>
+<td style="text-align:left"><strong>必选</strong></td>
+<td style="text-align:left">写入文件的路径</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>options</code></td>
+<td style="text-align:left"><strong>Object</strong></td>
+<td style="text-align:left">可选</td>
+<td style="text-align:left">写入文件时的参数</td>
+</tr>
+</tbody>
+</table>
+<p>这里唯一值得一提就是写入文件的路径。这里的写入路径是gulp结合<code>gulp.src</code>中的<code>options.base</code>参数来计算的，我们传入的<code>path</code>参数其实只是最终生成文件路径的文件夹。让我们来看一个例子，</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">gulp.src(<span class="string">'js/jquery.js'</span>)</span><br><span class="line">    .pipe(gulp.dest(<span class="string">'dist/build.js'</span>));</span><br></pre></td></tr></table></figure>
+<p>上面的代码最终写的文件路径是<strong><code>dist/build.js/jquery.js</code></strong>，而不是<code>dist/build.js</code>。</p>
+<p>其实，<code>gulp.dest</code>在写文件时，其步骤可以简单抽象如下，</p>
+<ol>
+<li>将<code>gulp.src</code>得到的文件路径分解为<strong>base</strong> + <strong>matched</strong>的形式。而base是匹配模式中<strong>开始出现通配符之前</strong>的路径，matched是<strong>开始出现通配符之后</strong>的路径。如果匹配模式中没有通配符，则matched为文件名。所以示例中的base为<code>js/</code>，matched为<code>jquery.js</code>。</li>
+<li><code>gulp.dest</code>的规则是使用写入路径参数替换base，再加上matched。即<code>dest-path</code> + <code>matched</code>。所以示例中最终的路径为<code>dist/build.js/jquery.js</code>。</li>
+<li>如果<code>gulp.dest</code>最终得到写入路径不存在，则会自动生成相应的路径。</li>
+</ol>
+<p>再来看一个例子，</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 假设要匹配的文件路径为src/public/js/jquery.js</span></span><br><span class="line">gulp.src(<span class="string">'src/public/**/*.js'</span>)      <span class="comment">// base: src/public/    matched: js/jquery.js</span></span><br><span class="line">    .pipe(gulp.dest(<span class="string">'dist/build'</span>)); <span class="comment">// result: dist/build/js/jquery.js</span></span><br><span class="line"></span><br><span class="line">gulp.src(<span class="string">'src/public/**/*.js'</span>, &#123;<span class="attr">base</span>: <span class="string">'src'</span>&#125;) <span class="comment">// base: src/    matched: public/js/jquery.js</span></span><br><span class="line">    .pipe(gulp.dest(<span class="string">'dist'</span>))               <span class="comment">// dist/public/js/jquery.js</span></span><br></pre></td></tr></table></figure>
+<p><strong>注意</strong>，</p>
+<ul>
+<li>当手动配置<code>options.base</code>时，将导致matched也会跟着发生变化。</li>
+<li>手动设置的<code>options.base</code>必须是原始base字符串的某个开始字串。比如示例中原始base串是<code>src/public</code>，那么手动设置的base只能是<code>src</code>或者<code>src/public</code>，而不能是其他的，否则将不能正确写入文件。</li>
+</ul>
+<h3 id="写入参数"><a href="#写入参数" class="headerlink" title="写入参数"></a>写入参数</h3><table>
+<thead>
+<tr>
+<th style="text-align:left">参数</th>
+<th style="text-align:left">默认值</th>
+<th style="text-align:left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>options.cwd</code></td>
+<td style="text-align:left"><code>process.cwd()</code></td>
+<td style="text-align:left">输出目录的cwd参数，只在所给的输出目录是相对路径时候有效。</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>options.mode</code></td>
+<td style="text-align:left"><strong>0777</strong></td>
+<td style="text-align:left">八进制权限字符，用以定义所有在输出目录中所创建的目录的权限。</td>
+</tr>
+</tbody>
+</table>
+<p>写入参数一般都不用自定义。</p>
+<h2 id="gulp-watch"><a href="#gulp-watch" class="headerlink" title="gulp.watch"></a><code>gulp.watch</code></h2><p><code>gulp.watch</code>用来监视文件的变化，当文件发生变化后，我们可以利用它来执行相应的任务。其内部是基于<a href="https://github.com/shama/gaze" target="_blank" rel="noopener">gaze</a>实现的。</p>
+<p>其用法如下，</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gulp.watch(glob[, opts], tasks)</span><br></pre></td></tr></table></figure>
+<p>或者</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gulp.watch(glob[, opts], fn)</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">参数</th>
+<th style="text-align:left">类型</th>
+<th style="text-align:left">是否可选</th>
+<th style="text-align:left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>glob</code></td>
+<td style="text-align:left"><strong>String</strong>, <strong>Array</strong></td>
+<td style="text-align:left"><strong>必须</strong></td>
+<td style="text-align:left">同<code>gulp.src</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>opts</code></td>
+<td style="text-align:left"><strong>Object</strong></td>
+<td style="text-align:left">可选</td>
+<td style="text-align:left">-</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>tasks</code></td>
+<td style="text-align:left"><strong>Array</strong></td>
+<td style="text-align:left"><strong>必须</strong></td>
+<td style="text-align:left">为文件变化后要执行的任务，为一个数组</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>fn</code></td>
+<td style="text-align:left"><strong>Function</strong></td>
+<td style="text-align:left"><strong>必须</strong></td>
+<td style="text-align:left">文件变化后需要执行的回调函数，函数参数为一个对象</td>
+</tr>
+</tbody>
+</table>
+<p>来看个例子，</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">gulp.task(<span class="string">'uglify'</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="comment">//do something</span></span><br><span class="line">&#125;);</span><br><span class="line">gulp.task(<span class="string">'reload'</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="comment">//do something</span></span><br><span class="line">&#125;);</span><br><span class="line">gulp.watch(<span class="string">'js/**/*.js'</span>, [<span class="string">'uglify'</span>,<span class="string">'reload'</span>]);</span><br></pre></td></tr></table></figure>
+<p>使用<code>fn</code>的例子，</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">gulp.watch(<span class="string">'js/**/*.js'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">ev</span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(ev.type); <span class="comment">//变化类型 added为新增,deleted为删除，changed为改变 </span></span><br><span class="line">    <span class="built_in">console</span>.log(ev.path); <span class="comment">//变化的文件的路径</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h1 id="参考列表"><a href="#参考列表" class="headerlink" title="参考列表"></a>参考列表</h1><ul>
+<li><a href="http://gulpjs.com/" target="_blank" rel="noopener">gulp</a></li>
+<li><a href="http://www.gulpjs.com.cn/" target="_blank" rel="noopener">gulp中文网</a></li>
+<li><a href="http://www.cnblogs.com/2050/p/4198792.html" target="_blank" rel="noopener">前端构建工具gulpjs的使用介绍及技巧</a></li>
+</ul>
+
+
+            <div class="post-info">
+    <p class="eof">- EOF -</p>
+    <p class="copyright">All rights reserved <a href="http://blog.gejiawen.com/about/">@gejiawen</a>.</p>
+    <p class="link">本文链接：<a href="http://blog.gejiawen.com/2015/12/05/gulp-reminder-1-api/">http://blog.gejiawen.com/2015/12/05/gulp-reminder-1-api/</a></p>
+
+    <div class="share">
+    分享本页：
+    
+        <div class="bdsharebuttonbox"><a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a><a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a><a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a><a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a><a href="#" class="bds_more" data-cmd="more"></a></div>
+<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"1","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+
+    
+    
+</div>
+
+</div>
+
+
+            
+
+
+
+        </div>
+    </div>
+</article>
+
+    <footer id="footer">
+        <div id="bottom-tip">
+            蛋糕仙人 —— <small>技术人需要危机感</small>
+        </div>
+        <small>该博客由 <a href="https://hexo.io/" target="_blank">Hexo</a> 强力驱动，搭载 <a href="https://github.com/gejiawen/hexadillax2" target="_blank">Hexadillax2</a> 主题</small><br>
+        <!--<small>如果你访问github速度过慢，可移步本站的备份站点<a href="http://gejiawen.gitcafe.io">gejiawen.gitcafe.io</a></small><br />-->
+        <small>&copy; 2018 <a href="http://blog.gejiawen.com" target="_blank">gejiawen</a>&nbsp;<a href="http://www.miitbeian.gov.cn/" target="_blank">皖ICP备16008778号</a></small>
+    </footer>
+    
+    <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e4dd778a6204eb51e4f25460e37481ad";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+    <script type="text/javascript" src="http://tajs.qq.com/stats?sId=58628762" charset="UTF-8"></script>
+
+
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-51347904-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
